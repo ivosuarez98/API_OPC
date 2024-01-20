@@ -1,3 +1,5 @@
+from config import *
+
 class Report:
     def __init__(self):
         pass
@@ -5,23 +7,21 @@ class Report:
     def report_dato(self,equipo):
         try:
             equipo_data = {
-                "Nombre de Equipo": str(equipo.datos.get("Nombre_Equipo").Get_Valor()),
+                INDX_INICIO_LECTURA_OPC[1]:equipo.valores_inicio_ciclo[1].Get_Valor(),
                 "componentes": 
                     {
-                    "Estado":                   {"value": str(equipo.datos.get("Estado").Get_Valor())},
-                    "Temperatura_Ingreso":   {"value": str(equipo.datos.get("Temp_ingreso").Get_Valor())},
-                    "Temperatura_Producto":  {"value": str(equipo.datos.get("Temp_producto").Get_Valor())},
-                    "Temperatura_Equipo":    {"value": str(equipo.datos.get("Temp_equipo").Get_Valor())},
-                    "Temperatura_Chiller":   {"value": str(equipo.datos.get("Temp_chiller").Get_Valor())},
-                    "Nivel_agua":            {"value": str(equipo.datos.get("Nivel_agua").Get_Valor())},
-                    "Vapor_serpentina":     {"value": str(equipo.datos.get("Serpentina_Vapor").Get_Valor())},
-                    "Vapor_Vivo":               {"value": str(equipo.datos.get("Vivo_Vapor").Get_Valor())}
+                    INDX_INICIO_LECTURA_OPC[0]:{equipo.valores_inicio_ciclo[0].Get_Valor()},
+                    INDX_DATOS_LECTURA_OPC[2]:{equipo.valores_datos[2].Get_Valor()},
+                    INDX_DATOS_LECTURA_OPC[1]:{equipo.valores_datos[1].Get_Valor()},
+                    INDX_DATOS_LECTURA_OPC[0]:{equipo.valores_datos[0].Get_Valor()},
+                    INDX_DATOS_LECTURA_OPC[3]:{equipo.valores_datos[3].Get_Valor()},
+                    INDX_DATOS_LECTURA_OPC[4]:{equipo.valores_datos[4].Get_Valor()},
+                    INDX_DATOS_LECTURA_OPC[5]:{equipo.valores_datos[5].Get_Valor()},
+                    INDX_DATOS_LECTURA_OPC[6]:{equipo.valores_datos[6].Get_Valor()},
                     },
-                "Nombre_Receta":     str(equipo.datos.get("Nombre_Receta").Get_Valor()),
-                "Numero_Receta":     str(equipo.datos.get("Numero_Receta").Get_Valor()),
-                "Cantida_pasos":     str(equipo.datos.get("numero_Pasos").Get_Valor()),
-                "Cantidad_alarmas":  str(equipo.datos.get("numero_alarma").Get_Valor()),
-                "ID_ultima_alarma":  str(equipo.datos.get("id_alarma").Get_Valor())
+                INDX_INICIO_LECTURA_OPC[4]:{equipo.valores_inicio_ciclo[4].Get_Valor()},
+                INDX_INICIO_LECTURA_OPC[3]:{equipo.valores_inicio_ciclo[3].Get_Valor()},
+                INDX_INICIO_LECTURA_OPC[5]:{equipo.valores_inicio_ciclo[5].Get_Valor()},
                 }
             return equipo_data
         except Exception as e:
@@ -51,3 +51,9 @@ class Report:
                 return datos_sensor
         except Exception as e:
             print(f"Error al generar graficas: {str(e)}")
+
+    def test(self,equipo):
+        test_id={
+            INDX_INICIO_LECTURA_OPC[0]: equipo.valores_inicio_ciclo[0].Get_Valor()
+        }
+        return test_id

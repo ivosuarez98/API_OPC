@@ -15,8 +15,6 @@ flag_READ_OPC=False
 HILO_TIMER=False#true
 
 app = Flask(__name__)
-# MI IP
-opc_server_url = "opc.tcp://192.168.0.140:8080"
 
 Equipos={"Cocina1": 1, "Enfriador1": 2,}#NS
 
@@ -37,19 +35,18 @@ def timer():
         print("hola")
         time.sleep(TIME_INTERVAL)  
 t = threading.Thread(target=timer)
-
-
 t.start()
 
-
-
-
 Equipo1.reed_inicio()
+Equipo1.read_datos()
 Equipo1.print_inicio()
+#Equipo1.print_data()
 
 
 
 r=Report()
+print("holas")
+print(r.report_dato(Equipo1))
 
 
 i=0

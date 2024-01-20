@@ -2,7 +2,7 @@
 TIME_INTERVAL=10
 IP="192.168.0.81"
 
-URL="opc.tcp://192.168.0.61:4840/freeopcua/server/"
+URL="opc.tcp://192.168.0.205:4840/freeopcua/server/"
 INDX_EQUIPO2={
     "URL":                          URL,  
     "NameSpace":                    2,
@@ -61,4 +61,21 @@ INDX_EQUIPO3={
     "Numero de alarmas":            15
 }
 
+#estos indices los uso para convertir los indices fijos de las diferentes lecturas
+INDX_INICIO_LECTURA_OPC=["ESTADO",              #0
+                         "NOMBRE_EQUIPO",       #1
+                         "NRO_TORRES",          #2
+                         "NRO_RECETA",          #3
+                         "NOMBRE_RECETA",       #4
+                         "NRO_PASOS"            #5
+                         ]      
 
+INDX_DATOS_LECTURA_OPC=["TEM_EQUIPO",           #0
+                        "TEMP_PRODUCTO",        #1
+                        "TEMP_INGRESO",         #2
+                        "TEMP_CHILLER",         #3
+                        "NIVEL_AGUA",           #4
+                        "VAPOR_VIVO",           #5
+                        "VAPOR_SERPENTINA"      #6
+                        
+                        ]

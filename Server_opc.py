@@ -4,7 +4,7 @@ from opcua import Server
 
 # Crear un servidor OPC UA
 server = Server()
-server.set_endpoint("opc.tcp://192.168.0.61:4840/freeopcua/server/")
+server.set_endpoint("opc.tcp://192.168.0.205:4840/freeopcua/server/")
 
 # Configurar el espacio de nombres
 uri = "http://example.org/ns1"

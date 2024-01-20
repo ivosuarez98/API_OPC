@@ -48,20 +48,17 @@ class Equipo:
         self.id                 = id
 
         self.nodos              =nodo(index)
+        #Aca se cargan los indices que se utilizan de lectura unica. 
         self.nodos_inicio_ciclo_idx    =[  
                                         self.nodos.Estado_idx,
                                         self.nodos.Nombre_Equipo_idx,
                                         self.nodos.Cilclo_nro_torres_idx,
                                         self.nodos.Ciclo_nro_receta_idx,
-                                        self.nodos.Ciclo_nombre_receta_idx
+                                        self.nodos.Ciclo_nombre_receta_idx,
+                                        self.nodos.numero_Pasos_idx
                                     ]
-        self.nodos_inicio_ciclo        =[
-          
-
-                                        ]
-        self.valores_inicio_ciclo       ={
-                                         
-                                        }
+        #Aca se almacena los datos de lectura unica.
+        self.valores_inicio_ciclo       ={}
 
         self.nodos_datos_idx        =[  
                                         self.nodos.Temp_equipo_idx,
@@ -69,17 +66,15 @@ class Equipo:
                                         self.nodos.Temp_ingreso_idx,
                                         self.nodos.Temp_chiller_idx,
                                         self.nodos.Nivel_agua_idx,
-                                        self.nodos.Vivo_Vapor_idx
-                                    ]
-        self.nodos_datos            =[]
-        
+                                        self.nodos.Vivo_Vapor_idx,
+                                        self.nodos.Serpentina_Vapor_idx
+                                        ]
+        self.valores_datos={}
         self.nodos_cierre_ciclo_idx     =[  
                                         self.nodos.Ciclo_pausas_totales,
                                         self.nodos.Ciclo_tiempo_tras,
                                         self.nodos.Ciclo_tipo_fin
                                     ]
-        self.nodos_cierre_ciclo        =[]
-
         self.datos              = {}
         self.arr_historico      = {}
 
@@ -96,70 +91,27 @@ class Equipo:
             self.client.disconnect()
             print("Desconexión exitosa del servidor OPC")
     
-    def verificar_conexion(self):
-        if self.client.is_connected():
-            print("El cliente OPC está conectado.")
-        else:
-            print("El cliente OPC no está conectado. Intentando conectar...")
-            try:
-                self.client.connect()
-                print("Conexión exitosa.")
-            except Exception as e:
-                print(f"No se pudo establecer la conexión. Error: {e}")
-    
-    def agregar_nodos_datos(self):
-        for nodo_id in self.nodos_datos_idx:
-            try:
-                node_id_str = f"ns={self.NSpace};i={nodo_id}"
-                nodo_valor = self.client.get_node(node_id_str)
-                self.nodos_datos.append(nodo_valor)
-                print(f"Nodo '{nodo_id}' agregado correctamente.")
-            except Exception as e:
-                print(f"Error al agregar nodo '{nodo_id}': {str(e)}")
-
-
-    def agregar_nodos_cierre_ciclo(self):
-        for nodo_id in self.nodos_cierre_ciclo_idx:
-            try:
-                node_id_str = f"ns={self.NSpace};i={nodo_id}"
-                nodo_valor = self.client.get_node(node_id_str)
-                self.nodos_cierre_ciclo.append(nodo_valor)
-                print(f"Nodo '{nodo_id}' agregado correctamente.")
-            except Exception as e:
-                print(f"Error al agregar nodo '{nodo_id}': {str(e)}")
-
-    def agregar_nodos_inicio_ciclo(self):
-        for nodo_id in self.nodos_inicio_ciclo_idx:
-            print(nodo_id)
-            try:
-                self.nodos_inicio_ciclo.append(f"ns={self.NSpace};i={nodo_id}")
-
-
-                print(f"Nodo '{nodo_id}' agregado correctamente.")
-            except Exception as e:
-                print(f"Error al agregar nodo '{nodo_id}': {str(e)}")
-
     def reed_inicio(self):
         for i, nodo_idx in enumerate(self.nodos_inicio_ciclo_idx):
             nodo_tag = self.client.get_node(f"ns={self.NSpace};i={nodo_idx}")
             value = nodo_tag.get_value()
             self.valores_inicio_ciclo[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M"), valor=value)
     
-    def read_equipo(self):
-        pass
-
+    def read_datos(self):
+        for i, nodo_idx in enumerate(self.nodos_datos_idx):
+            nodo_tag = self.client.get_node(f"ns={self.NSpace};i={nodo_idx}")
+            value = nodo_tag.get_value()
+            self.valores_datos[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M"), valor=value)
+    
     def read_cierre(self):
         pass
 
-    def read_data(self):
+    def read_data(self):#en des uso 
         try:
             if self.client is None :
                 self.connect()
-
-            # Filtrar solo los atributos cuyos nombres terminan con '_idx'
             relevant_attributes = [attr for attr in dir(self) if attr.endswith('_idx')]
             
-            # Limpiar la lista de nodos antes de la lectura
             self.nodes = []
 
             for attribute_name in relevant_attributes:
@@ -190,7 +142,17 @@ class Equipo:
         try:
             print("pase")
             for variable_name, value in self.valores_inicio_ciclo.items():
-                print(f"{variable_name}: Tiempo={value.Get_Tiempo()}, Valor={value.Get_Valor()}")
+                print(variable_name)
+                print(f"{INDX_INICIO_LECTURA_OPC[variable_name]}: Tiempo={value.Get_Tiempo()}, Valor={value.Get_Valor()}")
+        except Exception as e:
+            print(f"Error al imprimir datos OPC: {str(e)}")
+
+    def print_data(self):
+        try:
+            print("pase")
+            for variable_name, value in self.valores_datos.items():
+                print(variable_name)
+                print(f"{INDX_INICIO_LECTURA_OPC[variable_name]}: Tiempo={value.Get_Tiempo()}, Valor={value.Get_Valor()}")
         except Exception as e:
             print(f"Error al imprimir datos OPC: {str(e)}")
 
