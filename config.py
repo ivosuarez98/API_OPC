@@ -1,8 +1,8 @@
 
-TIME_INTERVAL=10
-IP="192.168.0.81"
+TIME_INTERVAL=1
+IP="192.168.0.73"
 
-URL="opc.tcp://192.168.0.205:4840/freeopcua/server/"
+URL="opc.tcp://192.168.10.120:4840"
 INDX_EQUIPO2={
     "URL":                          URL,  
     "NameSpace":                    2,
@@ -21,10 +21,10 @@ INDX_EQUIPO2={
 }
 INDX_EQUIPO1={
     "URL":                          URL, 
-    "NameSpace":                    2,
+    "NameSpace":                    4,
     "NombreEquipo":                 10,
-    "Estado":                       10,
-    "Temperatura de Ingreso":       10,
+    "Estado":                       2,
+    "Temperatura de Ingreso":       3,
     "Temperatura de Producto":      10,
     "Temperatura de Agua":          10,
     "Temperatura de Chiller":       10,
@@ -39,7 +39,7 @@ INDX_EQUIPO1={
     "Ciclo Numero de torres":       5,
     "Ciclo Tipo de fin":            5,
     "Ciclo Tiempo Transcurrido":    5,
-    "CicloPausas Totales":          5
+    "CicloPausas Totales":         5
 }
 
 INDX_EQUIPO3={
@@ -70,7 +70,7 @@ INDX_INICIO_LECTURA_OPC=["ESTADO",              #0
                          "NRO_PASOS"            #5
                          ]      
 
-INDX_DATOS_LECTURA_OPC=["TEM_EQUIPO",           #0
+INDX_DATOS_LECTURA_OPC=["TEM_AGUA",           #0
                         "TEMP_PRODUCTO",        #1
                         "TEMP_INGRESO",         #2
                         "TEMP_CHILLER",         #3

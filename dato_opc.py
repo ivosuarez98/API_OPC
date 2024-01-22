@@ -70,13 +70,15 @@ class Equipo:
                                         self.nodos.Serpentina_Vapor_idx
                                         ]
         self.valores_datos={}
+        self.arr_historico      = {}
+
         self.nodos_cierre_ciclo_idx     =[  
                                         self.nodos.Ciclo_pausas_totales,
                                         self.nodos.Ciclo_tiempo_tras,
                                         self.nodos.Ciclo_tipo_fin
                                     ]
         self.datos              = {}
-        self.arr_historico      = {}
+        
 
     def connect(self):
         try:
@@ -94,15 +96,26 @@ class Equipo:
     def reed_inicio(self):
         for i, nodo_idx in enumerate(self.nodos_inicio_ciclo_idx):
             nodo_tag = self.client.get_node(f"ns={self.NSpace};i={nodo_idx}")
-            value = nodo_tag.get_value()
-            self.valores_inicio_ciclo[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M"), valor=value)
+            print(i)
+            try:
+                value = nodo_tag.get_value()
+                self.valores_inicio_ciclo[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor=value)
+            except:
+                
+                print(f"Nodo invalido, ns={self.NSpace};i={nodo_idx},Inicio")
+                self.valores_inicio_ciclo[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor="xxx")
+
+            
     
     def read_datos(self):
         for i, nodo_idx in enumerate(self.nodos_datos_idx):
-            nodo_tag = self.client.get_node(f"ns={self.NSpace};i={nodo_idx}")
-            value = nodo_tag.get_value()
-            self.valores_datos[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M"), valor=value)
-    
+            try:
+                nodo_tag = self.client.get_node(f"ns={self.NSpace};i={nodo_idx}")
+                value = nodo_tag.get_value()
+                self.valores_datos[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor=value)
+            except:
+                print(f"Nodo invalido, ns={self.NSpace};i={nodo_idx},datos")
+                self.valores_datos[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor="xxx")
     def read_cierre(self):
         pass
 
@@ -155,6 +168,18 @@ class Equipo:
                 print(f"{INDX_INICIO_LECTURA_OPC[variable_name]}: Tiempo={value.Get_Tiempo()}, Valor={value.Get_Valor()}")
         except Exception as e:
             print(f"Error al imprimir datos OPC: {str(e)}")
+
+    def cargar_en_historico(self):
+        try:
+            for variable_nombre,value in self.valores_datos.items():
+                print(variable_nombre)
+                if variable_nombre not in self.arr_historico:
+                    self.arr_historico[variable_nombre] = []
+                self.arr_historico[variable_nombre].append(value)
+
+        except Exception as e:
+            print(f"Error al cargar datos en historico: {str(e)}")
+
 
 
     def completar_historicos(self):
