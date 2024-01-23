@@ -58,3 +58,14 @@ class Report:
             INDX_INICIO_LECTURA_OPC[0]: equipo.valores_inicio_ciclo[0].Get_Valor()
         }
         return test_id
+    
+    def report_home(self,equipos):
+        result=[]
+        for equipo in equipos:
+            dato={
+                INDX_INICIO_LECTURA_OPC[1]: equipo.valores_inicio_ciclo[1].Get_Valor(),
+                INDX_INICIO_LECTURA_OPC[0]: equipo.valores_inicio_ciclo[0].Get_Valor(),
+                INDEX_CIERRE_LECTURA_OPC[1]:equipo.valores_cierre_ciclo[1].Get_Valor()
+            }
+            result.append(dato)
+        return{"Eqipos":result}

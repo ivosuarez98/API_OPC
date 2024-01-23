@@ -26,14 +26,26 @@ Equipo1=Equipo("Cocina",
               )
 Equipo1.connect()
    
+i = 0
 
 def timer():
-    while HILO_TIMER:
-        global flag_READ_OPC
-        Equipo1.reed_inicio()
-        Equipo1.read_datos()
-        Equipo1.cargar_en_historico()
-        time.sleep(TIME_INTERVAL)  
+    global i
+    print(i)
+    while True:
+        try:
+            Equipo1.reed_inicio()
+            Equipo1.read_datos()
+            Equipo1.cargar_en_historico()
+            Equipo1.read_cierre()
+
+        except Exception as e:
+            print(f"Error al interactuar con Equipo1: {e}")
+            print("Equipo no disponible")
+        time.sleep(TIME_INTERVAL)
+
+# Suponiendo que TIME_INTERVAL está definido en algún lugar antes de este código
+
+# Crear el hilo y comenzar el temporizador
 t = threading.Thread(target=timer)
 t.start()
 
@@ -69,6 +81,21 @@ def consultar_historicos(equipo,tag):
 
     except Exception as e:
         return jsonify({"error": f"Error al consultar datos: {str(e)}"}), 500
+
+@app.route('/Home', methods=['GET'])
+def consultar_home():
+    try:
+        equipos=[Equipo1,Equipo1]
+        json_data = {}
+        json_data = r.report_home(equipos)  
+        print(json_data)
+
+        return json_data
+
+    except Exception as e:
+        return jsonify({"error": f"Error al consultar datos: {str(e)}"}), 500
+
+
 
 if __name__ == '__main__':
     app.run(host=IP,debug=True)
