@@ -7,20 +7,20 @@ class Report:
     def report_dato(self,equipo):
         try:
             equipo_data = {
-                             INDX_INICIO_LECTURA_OPC[1]: equipo.valores_inicio_ciclo[1].Get_Valor(),
+                             INDX_INICIO_LECTURA_OPC[0]: equipo.valores_inicio_ciclo[0].Get_Valor(),
                             "componentes": {
-                                                INDX_INICIO_LECTURA_OPC[0]: equipo.valores_inicio_ciclo[0].Get_Valor(),
-                                                INDX_DATOS_LECTURA_OPC[2]: equipo.valores_datos[2].Get_Valor(),
-                                                INDX_DATOS_LECTURA_OPC[1]: equipo.valores_datos[1].Get_Valor(),
                                                 INDX_DATOS_LECTURA_OPC[0]: equipo.valores_datos[0].Get_Valor(),
                                                 INDX_DATOS_LECTURA_OPC[3]: equipo.valores_datos[3].Get_Valor(),
+                                                INDX_DATOS_LECTURA_OPC[2]: equipo.valores_datos[2].Get_Valor(),
+                                                INDX_DATOS_LECTURA_OPC[1]: equipo.valores_datos[1].Get_Valor(),
                                                 INDX_DATOS_LECTURA_OPC[4]: equipo.valores_datos[4].Get_Valor(),
                                                 INDX_DATOS_LECTURA_OPC[5]: equipo.valores_datos[5].Get_Valor(),
                                                 INDX_DATOS_LECTURA_OPC[6]: equipo.valores_datos[6].Get_Valor(),
+                                                INDX_DATOS_LECTURA_OPC[7]: equipo.valores_datos[7].Get_Valor(),
                                             },
-                                INDX_INICIO_LECTURA_OPC[4]: equipo.valores_inicio_ciclo[4].Get_Valor(),
                                 INDX_INICIO_LECTURA_OPC[3]: equipo.valores_inicio_ciclo[3].Get_Valor(),
-                                INDX_INICIO_LECTURA_OPC[5]: equipo.valores_inicio_ciclo[5].Get_Valor()
+                                INDX_INICIO_LECTURA_OPC[2]: equipo.valores_inicio_ciclo[2].Get_Valor(),
+                                INDX_INICIO_LECTURA_OPC[4]: equipo.valores_inicio_ciclo[4].Get_Valor()
                             }
 
             return equipo_data
@@ -52,20 +52,21 @@ class Report:
                 return datos_sensor
         except Exception as e:
             print(f"Error al generar graficas: {str(e)}")
-
-    def test(self,equipo):
-        test_id={
-            INDX_INICIO_LECTURA_OPC[0]: equipo.valores_inicio_ciclo[0].Get_Valor()
-        }
-        return test_id
     
     def report_home(self,equipos):
         result=[]
         for equipo in equipos:
             dato={
-                INDX_INICIO_LECTURA_OPC[1]: equipo.valores_inicio_ciclo[1].Get_Valor(),
-                INDX_INICIO_LECTURA_OPC[0]: equipo.valores_inicio_ciclo[0].Get_Valor(),
-                INDEX_CIERRE_LECTURA_OPC[1]:equipo.valores_cierre_ciclo[1].Get_Valor()
+                INDX_INICIO_LECTURA_OPC[1]  : equipo.valores_inicio_ciclo[1].Get_Valor(),
+                INDX_DATOS_LECTURA_OPC[0]   : equipo.valores_datos[0].Get_Valor(),
+                INDEX_CIERRE_LECTURA_OPC[1] : equipo.valores_cierre_ciclo[1].Get_Valor(),
+                INDX_DATOS_LECTURA_OPC[0]   : equipo.valores_datos[0].Get_Valor(),
+                INDEX_CIERRE_LECTURA_OPC[1] : equipo.valores_cierre_ciclo[1].Get_Valor(),
+                INDX_INICIO_LECTURA_OPC[0]  :  equipo.valores_inicio_ciclo[0].Get_Valor(),
+                INDX_INICIO_LECTURA_OPC[3]  :  equipo.valores_inicio_ciclo[3].Get_Valor(),
+                "ID"                        :  equipo.id,
+                
             }
             result.append(dato)
         return{"Eqipos":result}
+    

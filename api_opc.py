@@ -1,20 +1,19 @@
-#from flask import Flask, jsonify
 import threading
 import time
 from datetime import datetime
-import json
-from collections import deque
-from dato_opc import *
-from metodos_GET import *
+from Equipo import *
 from report import *
 from flask import Flask, jsonify
 from config import *
 import time
+from alarmas import *
+from flask_cors import CORS,cross_origin
 
 flag_READ_OPC=False
 HILO_TIMER=True
 
 app = Flask(__name__)
+CORS(app)                               #cors es una problema que se presento al leer los datos desde otra api 
 
 Equipos={"Cocina1": 1, "Enfriador1": 2,}#NS
 
@@ -26,11 +25,7 @@ Equipo1=Equipo("Cocina",
               )
 Equipo1.connect()
    
-i = 0
-
 def timer():
-    global i
-    print(i)
     while True:
         try:
             Equipo1.reed_inicio()
@@ -43,15 +38,20 @@ def timer():
             print("Equipo no disponible")
         time.sleep(TIME_INTERVAL)
 
-# Suponiendo que TIME_INTERVAL está definido en algún lugar antes de este código
-
-# Crear el hilo y comenzar el temporizador
 t = threading.Thread(target=timer)
 t.start()
 
-r=Report()
+#a=Alarmas(URL)
+#a.connect()
+#a.cargar_nodos(INDX_ALARMA,4)
+#a.suscribirce()
 
+r=Report()
+"""
+Reporte toma un equipo y reporta el estado actual del equipo. 
+"""
 # Ruta para consultar los últimos valores
+@cross_origin
 @app.route('/Reporte/<equipo>', methods=['GET'])
 def consultar_datos(equipo):
     try:
@@ -66,7 +66,10 @@ def consultar_datos(equipo):
 
     except Exception as e:
         return jsonify({"error": f"Error al consultar datos: {str(e)}"}), 500
-
+"""
+Historico toma un sensor y devuelve el historico del ciclo actual.
+"""
+@cross_origin
 @app.route('/Historico/<equipo>/<tag>', methods=['GET'])
 def consultar_historicos(equipo,tag):
     try:
@@ -81,10 +84,15 @@ def consultar_historicos(equipo,tag):
 
     except Exception as e:
         return jsonify({"error": f"Error al consultar datos: {str(e)}"}), 500
-
+"""
+Home es por definicion la pagina de inici de la web lo que se realizan es el empquetado 
+de todos los equipos en un array y el motodo retira los atributo.
+"""
+@cross_origin
 @app.route('/Home', methods=['GET'])
 def consultar_home():
     try:
+        #a.Print()
         equipos=[Equipo1,Equipo1]
         json_data = {}
         json_data = r.report_home(equipos)  
