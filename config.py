@@ -1,14 +1,14 @@
 
-TIME_INTERVAL=3
-IP="192.168.0.49"
+TIME_INTERVAL=10
+IP="192.168.0.95"
 
-URL="opc.tcp://192.168.0.140:8080"
-
+#URL="opc.tcp://192.168.0.140:8080"
+URL="opc.tcp://192.168.0.95:4840/freeopcua/server/"
 INDX_EQUIPO1={
     "URL":                          URL, 
-    "NameSpace":                    4,
+    "NameSpace":                    2,#4
     "NombreEquipo":                 7,
-    "Estado":                       10,
+    "Estado":                       3,
     "Temperatura de Ingreso":       3,
     "Temperatura de Producto":      10,
     "Temperatura de Agua":          10,
@@ -29,28 +29,28 @@ INDX_EQUIPO1={
 INDX_EQUIPO2={
     "URL":                          URL, 
     "NameSpace":                    4,
-    "NombreEquipo":                 10,
-    "Estado":                       2,
-    "Temperatura de Ingreso":       3,
-    "Temperatura de Producto":      10,
-    "Temperatura de Agua":          10,
-    "Temperatura de Chiller":       10,
+    "NombreEquipo":                 2,
+    "Estado":                       3,
+    "Temperatura de Ingreso":       4,
+    "Temperatura de Producto":      4,
+    "Temperatura de Agua":          4,
+    "Temperatura de Chiller":       4,
     "Nivel de Agua":                4,
     "Numero Receta":                4,
     "Nombre Receta":                4,
     "Numero de Pasos":              4,
     "Serpentina Vapor":             4,
     "Vivo Vapor":                   4,
-    "Ciclo Nombre de Receta":       5,
-    "Ciclo Numero de Receta":       5,
-    "Ciclo Numero de torres":       5,
-    "Ciclo Tipo de fin":            5,
-    "Ciclo Tiempo Transcurrido":    5,
-    "CicloPausas Totales":         5
+    "Ciclo Nombre de Receta":       4,
+    "Ciclo Numero de Receta":       4,
+    "Ciclo Numero de torres":       4,
+    "Ciclo Tipo de fin":            4,
+    "Ciclo Tiempo Transcurrido":    4,
+    "CicloPausas Totales":          4
 }
 
 INDX_ALARMA={
-    "1":          2,
+    "1":          10,
 }
 INDX_ALARMA_INV = {v: k for k, v in INDX_ALARMA.items()}
 
@@ -67,7 +67,7 @@ INDX_INICIO_LECTURA_OPC=[
 
 INDX_DATOS_LECTURA_OPC=[
                         "ESTADO",               #0
-                        "TEM_AGUA",             #1
+                        "TEMP_AGUA",             #1
                         "TEMP_PRODUCTO",        #2
                         "TEMP_INGRESO",         #3
                         "TEMP_CHILLER",         #4

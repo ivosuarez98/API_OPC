@@ -27,10 +27,7 @@ class Report:
         except Exception as e:
             print(f"Error al obtener datos del equipo: {str(e)},En report")
             return None    
-    
-    def report_home(self,equipos):
-        return 1
-    
+        
     def report_grafica(self,equipo,sensor):
         try:
             results = []
@@ -41,13 +38,14 @@ class Report:
                 for value in equipo.arr_historico[posicion_sensor]:
                     results.append({
                         "value": value.Get_Valor(),
-                        "fecha": value.Get_Tiempo()
+                        "time": value.Get_Tiempo()
                     })
 
                 # Crear el diccionario de datos_sensor con la información recopilada
                 datos_sensor = {
                     "sensor": sensor,
-                    "results": results
+                    "results": results,
+                    "ULTIMO":   equipo.valores_datos[posicion_sensor].Get_Valor()
                 }
                 return datos_sensor
         except Exception as e:
@@ -60,13 +58,11 @@ class Report:
                 INDX_INICIO_LECTURA_OPC[1]  : equipo.valores_inicio_ciclo[1].Get_Valor(),
                 INDX_DATOS_LECTURA_OPC[0]   : equipo.valores_datos[0].Get_Valor(),
                 INDEX_CIERRE_LECTURA_OPC[1] : equipo.valores_cierre_ciclo[1].Get_Valor(),
-                INDX_DATOS_LECTURA_OPC[0]   : equipo.valores_datos[0].Get_Valor(),
-                INDEX_CIERRE_LECTURA_OPC[1] : equipo.valores_cierre_ciclo[1].Get_Valor(),
                 INDX_INICIO_LECTURA_OPC[0]  :  equipo.valores_inicio_ciclo[0].Get_Valor(),
                 INDX_INICIO_LECTURA_OPC[3]  :  equipo.valores_inicio_ciclo[3].Get_Valor(),
                 "ID"                        :  equipo.id,
                 
             }
             result.append(dato)
-        return{"Eqipos":result}
+        return{"Equipos":result}
     

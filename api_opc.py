@@ -1,6 +1,5 @@
 import threading
 import time
-from datetime import datetime
 from Equipo import *
 from report import *
 from flask import Flask, jsonify
@@ -21,17 +20,30 @@ Equipo1=Equipo("Cocina",
               url=INDX_EQUIPO1["URL"],
               ns=INDX_EQUIPO1["NameSpace"],
               id=1,
-              index=INDX_EQUIPO1
+              index=INDX_EQUIPO2
               )
-Equipo1.connect()
-   
+Equipo1.connect()  
 def timer():
     while True:
         try:
             Equipo1.reed_inicio()
             Equipo1.read_datos()
-            Equipo1.cargar_en_historico()
             Equipo1.read_cierre()
+            try:
+                if Equipo1.is_ciclo_activo()==True:
+                    if Equipo1.is_ciclo_end()==False:
+                        print("Historico")
+                        Equipo1.cargar_en_historico()
+                    if Equipo1.ciclo_ACTIVATE == False  and Equipo1.is_ciclo_end() == False :
+                        print(Equipo1.ciclo_ACTIVATE)
+                        print("Ciclo DB")
+                        Equipo1.send_start_ciclo_db()
+                    if Equipo1.is_ciclo_end()==True and Equipo1.ciclo_ACTIVATE == True:
+                        print("Datos DB")
+                        Equipo1.send_data_DB()
+                        Equipo1.limpiar_historico()
+            except Exception as e:
+                Print_Console(f"Error al cargar datos en historico: {str(e)}")
 
         except Exception as e:
             print(f"Error al interactuar con Equipo1: {e}")
