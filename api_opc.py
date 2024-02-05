@@ -7,51 +7,27 @@ from config import *
 import time
 from alarmas import *
 from flask_cors import CORS,cross_origin
-
+from apscheduler.schedulers.background import BackgroundScheduler
+from mng_Equipo import *
 flag_READ_OPC=False
 HILO_TIMER=True
 
 app = Flask(__name__)
 CORS(app)                               #cors es una problema que se presento al leer los datos desde otra api 
 
-Equipos={"Cocina1": 1, "Enfriador1": 2,}#NS
 
-Equipo1=Equipo("Cocina",
-              url=INDX_EQUIPO1["URL"],
-              ns=INDX_EQUIPO1["NameSpace"],
-              id=1,
-              index=INDX_EQUIPO2
-              )
-Equipo1.connect()  
+
 def timer():
-    while True:
-        try:
-            Equipo1.reed_inicio()
-            Equipo1.read_datos()
-            Equipo1.read_cierre()
-            try:
-                if Equipo1.is_ciclo_activo()==True:
-                    if Equipo1.is_ciclo_end()==False:
-                        print("Historico")
-                        Equipo1.cargar_en_historico()
-                    if Equipo1.ciclo_ACTIVATE == False  and Equipo1.is_ciclo_end() == False :
-                        print(Equipo1.ciclo_ACTIVATE)
-                        print("Ciclo DB")
-                        Equipo1.send_start_ciclo_db()
-                    if Equipo1.is_ciclo_end()==True and Equipo1.ciclo_ACTIVATE == True:
-                        print("Datos DB")
-                        Equipo1.send_data_DB()
-                        Equipo1.limpiar_historico()
-            except Exception as e:
-                Print_Console(f"Error al cargar datos en historico: {str(e)}")
+    try:
+        with app.app_context():
+            mng(Equipo1)
+            #mng(Equipo2)
+    except Exception as e:
+        print(f"Error al interactuar con Equipo1: {e}")
+        print("Equipo no disponible")
+scheduler = BackgroundScheduler()
+scheduler.add_job(timer, trigger='interval', seconds=TIME_INTERVAL, max_instances=1)
 
-        except Exception as e:
-            print(f"Error al interactuar con Equipo1: {e}")
-            print("Equipo no disponible")
-        time.sleep(TIME_INTERVAL)
-
-t = threading.Thread(target=timer)
-t.start()
 
 #a=Alarmas(URL)
 #a.connect()
@@ -116,7 +92,18 @@ def consultar_home():
         return jsonify({"error": f"Error al consultar datos: {str(e)}"}), 500
 
 
+# Resto de las configuraciones...
 
 if __name__ == '__main__':
-    app.run(host=IP,debug=True)
+    Equipos={"Cocina1": 1, "Enfriador1": 2,}#NS
+
+    Equipo1=Equipo("Cocina",
+              url=INDX_EQUIPO1["URL"],
+              ns=INDX_EQUIPO1["NameSpace"],
+              id=1,
+              index=INDX_EQUIPO1
+              )
+    Equipo1.connect()  
+    scheduler.start()
+    app.run(host=IP, debug=True, use_reloader=False)
 

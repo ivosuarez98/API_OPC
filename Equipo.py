@@ -88,6 +88,7 @@ class Equipo:
         self.id_ciclo_DB=None
         
         self.ciclo_ACTIVATE=False
+  
 
     def connect(self):
         try:
@@ -131,7 +132,7 @@ class Equipo:
                 value = nodo_tag.get_value()
                 self.valores_datos[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor=value)
             except:
-                #print(f"Nodo invalido, ns={self.NSpace};i={nodo_idx},datos")
+                print(f"Nodo invalido, ns={self.NSpace};i={nodo_idx},datos")
                 self.valores_datos[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor="NULL")
 
     def read_cierre(self):
@@ -157,13 +158,13 @@ class Equipo:
                     Print_Console(f"Error Lectura")
 
     def cargar_en_historico(self):
+        self.cargar_tiempo_transcurrido()
         try:
             for variable_nombre,value in self.valores_datos.items():
                 #print(variable_nombre)
                 if variable_nombre not in self.arr_historico:
                     self.arr_historico[variable_nombre] = []
                 self.arr_historico[variable_nombre].append(value)
-
         except Exception as e:
             Print_Console(f"Error al cargar datos en historico: {str(e)}")
 
@@ -171,37 +172,40 @@ class Equipo:
         return self.valores_datos[0].Get_Valor()
 
     def send_start_ciclo_db(self):
-        Print_Console(f"Se cargo el ciclo a la db")
-        id_receta=self.valores_inicio_ciclo[2].Get_Valor()
-        fecha_receta=self.valores_inicio_ciclo[2].Get_Tiempo()
-        estado=self.get_estado()
-        print(" NO Exploto")
-        self.id_ciclo_DB=cargar_inicio_ciclo(self.id,id_receta,fecha_receta,estado,self.con)
-        print("Exploto")
-        self.ciclo_ACTIVATE=True
-        Print_Console(f"Se cargo el ciclo a la db")
+        if SEND_DATA_BASE==True:
+            id_receta=self.valores_inicio_ciclo[2].Get_Valor()
+            fecha_receta=self.valores_inicio_ciclo[2].Get_Tiempo()
+            estado=self.get_estado()
+            self.id_ciclo_DB=cargar_inicio_ciclo(self.id,id_receta,fecha_receta,estado,self.con)
+            self.ciclo_ACTIVATE=True
+            self.tiempoinicio=datetime.now()
 
     def send_data_DB(self):
-        print("pase")
+        if SEND_DATA_BASE==True:
+            for i in range(len(self.nodos_datos_idx)):
+                nombre  = INDX_DATOS_LECTURA_OPC[i]
+                cargar_componentes( nombre, self.arr_historico[i],self.id_ciclo_DB,self.con)
+            Print_Console(f"Se cargo datos en a la db")
 
-        for i in range(len(self.nodos_datos_idx)):
-            nombre  = INDX_DATOS_LECTURA_OPC[i]
-            cargar_componentes( nombre, self.arr_historico[i],self.id_ciclo_DB,self.con)
-            for valor in self.arr_historico[i]:
-                print(f"Nombe:{nombre},Valor:{valor.Get_Valor()},Tiempo:{valor.Get_Tiempo()},ID Ciclo:{self.id_ciclo_DB}")
-        self.id_ciclo_DB=None
-        self.ciclo_ACTIVATE=False
-        Print_Console(f"Se cargo datos en a la db")
-
-    def is_ciclo_activo(self):
-        if self.get_estado() !=  str(ESTADO_NO_ACTIVO) :
+    def is_ciclo_E_activo(self):
+        if self.get_estado() !=  (ESTADO_NO_ACTIVO) :
             return True
         return False
     
     def is_ciclo_end(self):
-        if self.get_estado() == str(ESTADO_FINALIZADO):
+        if self.get_estado() == (ESTADO_FINALIZADO):
             return True
         return False
     
     def limpiar_historico(self):
-        self.arr_historico.clear
+        self.arr_historico.clear()
+
+    def cargar_tiempo_transcurrido(self):
+        ahora = datetime.now()
+        self.tiempotranscurrido = str(ahora - self.tiempoinicio)
+
+    def send_cierre_DB(self):
+        self.ciclo_ACTIVATE=False
+        cerrar_ciclo(self.id_ciclo_DB,self.get_estado(),self.tiempotranscurrido,0,self.con)
+
+    

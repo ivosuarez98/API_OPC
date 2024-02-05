@@ -1,30 +1,30 @@
 
-TIME_INTERVAL=10
+TIME_INTERVAL=3
 IP="192.168.0.95"
 
-#URL="opc.tcp://192.168.0.140:8080"
-URL="opc.tcp://192.168.0.95:4840/freeopcua/server/"
+URL="opc.tcp://192.168.0.140:8080"
+#URL="opc.tcp://192.168.0.95:4840/freeopcua/server/"
 INDX_EQUIPO1={
     "URL":                          URL, 
-    "NameSpace":                    2,#4
-    "NombreEquipo":                 7,
+    "NameSpace":                    4,#4 numero de equipo 10
+    "NombreEquipo":                 8,
     "Estado":                       3,
-    "Temperatura de Ingreso":       3,
-    "Temperatura de Producto":      10,
-    "Temperatura de Agua":          10,
-    "Temperatura de Chiller":       10,
-    "Nivel de Agua":                4,
-    "Numero Receta":                11,
-    "Nombre Receta":                8,
-    "Numero de Pasos":              4,
-    "Serpentina Vapor":             4,
-    "Vivo Vapor":                   4,
-    "Ciclo Nombre de Receta":       5,
-    "Ciclo Numero de Receta":       5,
-    "Ciclo Numero de torres":       9,
+    "Temperatura de Ingreso":       5,
+    "Temperatura de Producto":      6,
+    "Temperatura de Agua":          4,
+    "Temperatura de Chiller":       6,
+    "Nivel de Agua":                7,
+    "Numero Receta":                9,
+    "Nombre Receta":                13,
+    "Numero de Pasos":              15,#agragar
+    "Serpentina Vapor":             11,
+    "Vivo Vapor":                   12,#Repetido
+    "Ciclo Nombre de Receta":       13,#Repetido
+    "Ciclo Numero de Receta":       9,
+    "Ciclo Numero de torres":       14,#numero 
     "Ciclo Tipo de fin":            5,
-    "Ciclo Tiempo Transcurrido":    12,
-    "CicloPausas Totales":         5
+    "Ciclo Tiempo Transcurrido":    16,
+    "CicloPausas Totales":          16
 }
 INDX_EQUIPO2={
     "URL":                          URL, 

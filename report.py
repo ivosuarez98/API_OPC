@@ -7,7 +7,7 @@ class Report:
     def report_dato(self,equipo):
         try:
             equipo_data = {
-                             INDX_INICIO_LECTURA_OPC[0]: equipo.valores_inicio_ciclo[0].Get_Valor(),
+                            INDX_INICIO_LECTURA_OPC[0]: equipo.nombre,                         
                             "componentes": {
                                                 INDX_DATOS_LECTURA_OPC[0]: equipo.valores_datos[0].Get_Valor(),
                                                 INDX_DATOS_LECTURA_OPC[3]: equipo.valores_datos[3].Get_Valor(),
@@ -20,7 +20,8 @@ class Report:
                                             },
                                 INDX_INICIO_LECTURA_OPC[3]: equipo.valores_inicio_ciclo[3].Get_Valor(),
                                 INDX_INICIO_LECTURA_OPC[2]: equipo.valores_inicio_ciclo[2].Get_Valor(),
-                                INDX_INICIO_LECTURA_OPC[4]: equipo.valores_inicio_ciclo[4].Get_Valor()
+                                INDX_INICIO_LECTURA_OPC[4]: equipo.valores_inicio_ciclo[4].Get_Valor(),
+                                INDEX_CIERRE_LECTURA_OPC[1]: str(equipo.tiempotranscurrido)
                             }
 
             return equipo_data
@@ -55,12 +56,12 @@ class Report:
         result=[]
         for equipo in equipos:
             dato={
-                INDX_INICIO_LECTURA_OPC[1]  : equipo.valores_inicio_ciclo[1].Get_Valor(),
-                INDX_DATOS_LECTURA_OPC[0]   : equipo.valores_datos[0].Get_Valor(),
-                INDEX_CIERRE_LECTURA_OPC[1] : equipo.valores_cierre_ciclo[1].Get_Valor(),
-                INDX_INICIO_LECTURA_OPC[0]  :  equipo.valores_inicio_ciclo[0].Get_Valor(),
-                INDX_INICIO_LECTURA_OPC[3]  :  equipo.valores_inicio_ciclo[3].Get_Valor(),
-                "ID"                        :  equipo.id,
+                INDX_INICIO_LECTURA_OPC[1]  :   equipo.valores_inicio_ciclo[1].Get_Valor(),
+                INDX_INICIO_LECTURA_OPC[0]  :   equipo.nombre,
+                INDEX_CIERRE_LECTURA_OPC[1] :   str(equipo.tiempotranscurrido),
+                INDX_INICIO_LECTURA_OPC[3]  :   equipo.valores_inicio_ciclo[3].Get_Valor(),
+                "ID"                        :   equipo.id,
+                INDX_DATOS_LECTURA_OPC[0]   :   equipo.valores_datos[0].Get_Valor(),
                 
             }
             result.append(dato)
