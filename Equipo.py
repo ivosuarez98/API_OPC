@@ -1,5 +1,5 @@
 from opcua import Client
-from datetime import datetime
+from datetime import datetime, timezone
 from config import *
 from DEFINE import *
 from sql import*
@@ -117,11 +117,11 @@ class Equipo:
             nodo_tag = self.client.get_node(f"ns={self.NSpace};i={nodo_idx}")
             try:
                 value = nodo_tag.get_value()
-                self.valores_inicio_ciclo[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor=value)
+                self.valores_inicio_ciclo[i] = Dato_OPC(tiempo=datetime.now(), valor=value)#strftime("%Y-%m-%d %H:%M:%S")
             except Exception as e:
                     error_msj = str(e)
                     if (EXP_NODE_NO_READ in error_msj):
-                        self.valores_inicio_ciclo[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor="NULL")
+                        self.valores_inicio_ciclo[i] = Dato_OPC(tiempo=datetime.now(), valor="NULL")
                     else:
                         Print_Console(f"Error Lectura inicio {e}, EQUIPO.py")
                         self.reconectar()
@@ -130,20 +130,20 @@ class Equipo:
             try:
                 nodo_tag = self.client.get_node(f"ns={self.NSpace};i={nodo_idx}")
                 value = nodo_tag.get_value()
-                self.valores_datos[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor=value)
+                self.valores_datos[i] = Dato_OPC(tiempo=datetime.now(), valor=value)
             except:
                 print(f"Nodo invalido, ns={self.NSpace};i={nodo_idx},datos")
-                self.valores_datos[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor="NULL")
+                self.valores_datos[i] = Dato_OPC(tiempo=datetime.now(), valor="NULL")
 
     def read_cierre(self):
         for i, nodo_idx in enumerate(self.nodos_cierre_ciclo_idx):
             try:
                 nodo_tag = self.client.get_node(f"ns={self.NSpace};i={nodo_idx}")
                 value = nodo_tag.get_value()
-                self.valores_cierre_ciclo[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor=value)
+                self.valores_cierre_ciclo[i] = Dato_OPC(tiempo=datetime.now(), valor=value)
             except:
                 #print(f"Nodo invalido, ns={self.NSpace};i={nodo_idx},datos")
-                self.valores_cierre_ciclo[i] = Dato_OPC(tiempo=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor="NULL")
+                self.valores_cierre_ciclo[i] = Dato_OPC(tiempo=datetime.now(), valor="NULL")
 
     def read_node_list_asoacite(self,index,save):
         for i, nodo_idx in enumerate(index):

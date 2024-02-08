@@ -20,7 +20,7 @@ def cargar_inicio_ciclo(id_equipo,id_receta,fecha_inicico,estado,conexion):
     try:
         cursor = conexion.cursor()
         consulta_insert = """
-                            INSERT INTO ciclo (id_equipo, id_receta, fecha_inicio, estado)
+                            INSERT INTO ciclo (id_equipo, id_receta, fecha_inicio, estado_inicio)
                             VALUES (%s, %s, %s, %s)
                         """
         valores_insert = (id_equipo, id_receta, fecha_inicico, estado)
@@ -40,7 +40,7 @@ def cargar_componentes(nombre_SENS, datos, id_ciclo, conexion):
     try:
         cursor = conexion.cursor()
         consulta_inicio = f"""
-            INSERT INTO {nombre_SENS} (valor, fecha, id_ciclo)
+            INSERT INTO c_{nombre_SENS} (valor, fecha, id_ciclo)
             VALUES
         """
         valores_insert = []
@@ -53,14 +53,15 @@ def cargar_componentes(nombre_SENS, datos, id_ciclo, conexion):
         conexion.commit()
         cursor.close()
         Print_DB("CARGAR Componentes OK")
-    except:
+    except Exception as e:
         Print_DB("fallo al cargar Componentes")
+        print(f"error en cargar lso componentes a la db: {str(e)} ")
 
 def cerrar_ciclo(id_ciclo,estado,tiempo,cant_pausas,conexion):
     try:
         cursor=conexion.cursor()
         cierre = """
-                    INSERT INTO cierre (id_ciclo, estado_fin,tiempo,cantidad_p)
+                    INSERT INTO cierre (id_ciclo, estado_fin,tiempo,cant_p)
                     VALUES (%s,%s,%s,%s)                    
                 """
         Valores=(id_ciclo,estado,tiempo,cant_pausas)

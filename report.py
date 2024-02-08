@@ -39,7 +39,7 @@ class Report:
                 for value in equipo.arr_historico[posicion_sensor]:
                     results.append({
                         "value": value.Get_Valor(),
-                        "time": value.Get_Tiempo()
+                        "time": int(value.Get_Tiempo().timestamp())
                     })
 
                 # Crear el diccionario de datos_sensor con la información recopilada
