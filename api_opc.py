@@ -17,17 +17,23 @@ CORS(app)                               #cors es una problema que se presento al
 
 
 
-def timer():
+def job_equipo1():
     try:
         with app.app_context():
             mng(Equipo1)
-            #mng(Equipo2)
+    except Exception as e:
+        print(f"Error al interactuar con Equipo1: {e}")
+        print("Equipo no disponible")
+def job_equipo2():
+    try:
+        with app.app_context():
+            mng(Equipo2)
     except Exception as e:
         print(f"Error al interactuar con Equipo1: {e}")
         print("Equipo no disponible")
 scheduler = BackgroundScheduler()
-scheduler.add_job(timer, trigger='interval', seconds=TIME_INTERVAL, max_instances=1)
-
+scheduler.add_job(job_equipo1, trigger='interval', seconds=TIME_INTERVAL, max_instances=1)
+scheduler.add_job(job_equipo2, trigger='interval', seconds=TIME_INTERVAL, max_instances=1)
 
 #a=Alarmas(URL)
 #a.connect()
@@ -44,13 +50,14 @@ Reporte toma un equipo y reporta el estado actual del equipo.
 def consultar_datos(equipo):
     try:
         json_data = {}
-        print(equipo)
-
-        if equipo in Equipos:
+        
+        if equipo == "Cocina1":
             json_data = r.report_dato(Equipo1)  
-            print(json_data)
 
-        return (json_data)
+        if equipo == "Enfriador1":
+            json_data = r.report_dato(Equipo2)  
+        return json_data
+ 
 
     except Exception as e:
         return jsonify({"error": f"Error al consultar datos: {str(e)}"}), 500
@@ -62,12 +69,14 @@ Historico toma un sensor y devuelve el historico del ciclo actual.
 def consultar_historicos(equipo,tag):
     try:
         json_data = {}
-        print(equipo)
+        #print(equipo)
 
-        if equipo in Equipos:
+        if equipo == "Cocina1":
             json_data = r.report_grafica(Equipo1,tag)  
             print(json_data)
-
+        if equipo == "Enfriador1":
+            json_data = r.report_grafica(Equipo2,tag)  
+            print(json_data)
         return json_data
 
     except Exception as e:
@@ -81,7 +90,7 @@ de todos los equipos en un array y el motodo retira los atributo.
 def consultar_home():
     try:
         #a.Print()
-        equipos=[Equipo1,Equipo1]
+        equipos=[Equipo1,Equipo2]
         json_data = {}
         json_data = r.report_home(equipos)  
         print(json_data)
@@ -103,7 +112,15 @@ if __name__ == '__main__':
               id=1,
               index=INDX_EQUIPO1
               )
+    Equipo2=Equipo("Enfriador",
+              url=INDX_EQUIPO2["URL"],
+              ns=INDX_EQUIPO2["NameSpace"],
+              id=2,
+              index=INDX_EQUIPO2
+              )
     Equipo1.connect()  
+    Equipo2.connect()  
+
     scheduler.start()
     app.run(host=IP, debug=True, use_reloader=False)
 
