@@ -1,6 +1,6 @@
 
 TIME_INTERVAL=3
-IP="192.168.0.95"
+IP="192.168.0.166"
 
 URL="opc.tcp://192.168.0.140:8080"
 #URL="opc.tcp://192.168.0.95:4840/freeopcua/server/"

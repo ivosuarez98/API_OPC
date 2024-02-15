@@ -84,7 +84,7 @@ class Equipo:
         self.valores_cierre_ciclo={}
         self.datos              = {}
         
-        self.con=conectrar_dB(USER_DB,PASS_DB,HOST_DB,DB,PORT)
+
         self.id_ciclo_DB=None
         
         self.ciclo_ACTIVATE=False
@@ -176,7 +176,7 @@ class Equipo:
             id_receta=self.valores_inicio_ciclo[2].Get_Valor()
             fecha_receta=self.valores_inicio_ciclo[2].Get_Tiempo()
             estado=self.get_estado()
-            self.id_ciclo_DB=cargar_inicio_ciclo(self.id,id_receta,fecha_receta,estado,self.con)
+            self.id_ciclo_DB=cargar_inicio_ciclo(self.id,id_receta,fecha_receta,estado)
             self.ciclo_ACTIVATE=True
             self.tiempoinicio=datetime.now()
 
@@ -184,7 +184,7 @@ class Equipo:
         if SEND_DATA_BASE==True:
             for i in range(len(self.nodos_datos_idx)):
                 nombre  = INDX_DATOS_LECTURA_OPC[i]
-                cargar_componentes( nombre, self.arr_historico[i],self.id_ciclo_DB,self.con)
+                cargar_componentes( nombre, self.arr_historico[i],self.id_ciclo_DB)
             Print_Console(f"Se cargo datos en a la db")
 
     def is_ciclo_E_activo(self):
@@ -206,6 +206,6 @@ class Equipo:
 
     def send_cierre_DB(self):
         self.ciclo_ACTIVATE=False
-        cerrar_ciclo(self.id_ciclo_DB,self.get_estado(),self.tiempotranscurrido,0,self.con)
+        cerrar_ciclo(self.id_ciclo_DB,self.get_estado(),self.tiempotranscurrido,0)
 
     

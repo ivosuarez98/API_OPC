@@ -33,7 +33,7 @@ def job_equipo2():
         print("Equipo no disponible")
 scheduler = BackgroundScheduler()
 scheduler.add_job(job_equipo1, trigger='interval', seconds=TIME_INTERVAL, max_instances=1)
-scheduler.add_job(job_equipo2, trigger='interval', seconds=TIME_INTERVAL, max_instances=1)
+#scheduler.add_job(job_equipo2, trigger='interval', seconds=TIME_INTERVAL, max_instances=1)
 
 #a=Alarmas(URL)
 #a.connect()
@@ -90,7 +90,7 @@ de todos los equipos en un array y el motodo retira los atributo.
 def consultar_home():
     try:
         #a.Print()
-        equipos=[Equipo1,Equipo2]
+        equipos=[Equipo1,Equipo1]
         json_data = {}
         json_data = r.report_home(equipos)  
         print(json_data)
@@ -119,8 +119,8 @@ if __name__ == '__main__':
               index=INDX_EQUIPO2
               )
     Equipo1.connect()  
-    Equipo2.connect()  
+    #Equipo2.connect()  
 
     scheduler.start()
-    app.run(host=IP, debug=True, use_reloader=False)
+    app.run(host=IP, debug=True, use_reloader=False,port=5001)
 

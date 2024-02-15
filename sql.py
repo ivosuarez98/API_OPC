@@ -13,10 +13,23 @@ def conectrar_dB(user,pasw,host,db,port):
     except:
         Print_DB("Error al conectar a la db")
 
+def verificar_conexion(conexion):
+    if conexion.is_connected():
+        return True
+    Print_DB("ERROR En la reconecxion de la base de datos ")
+    return False
+
+
+
 """
 Cargar el ciclo a la base de datos y devuelve el indice
 """
-def cargar_inicio_ciclo(id_equipo,id_receta,fecha_inicico,estado,conexion):
+def cargar_inicio_ciclo(id_equipo,id_receta,fecha_inicico,estado):
+    
+    conexion=conectrar_dB(USER_DB,PASS_DB,HOST_DB,DB,PORT)
+    if verificar_conexion(conexion)==False:
+        print("Fallo en la conecion")
+        pass    
     try:
         cursor = conexion.cursor()
         consulta_insert = """
@@ -30,13 +43,19 @@ def cargar_inicio_ciclo(id_equipo,id_receta,fecha_inicico,estado,conexion):
         cursor.close()
         Print_DB("CARGAR inicio de ciclo")
         return last_id
-    except:
-        Print_DB("fallo al cargar INICIO de ciclo")
+    except  Exception as e :
+        Print_DB(f"Fallo al cargar INICIO de ciclo: {str(e)}")
+    finally: 
+        desconectar_dB(conexion)
 
 """
 Cargar los componentes 
 """
-def cargar_componentes(nombre_SENS, datos, id_ciclo, conexion):
+def cargar_componentes(nombre_SENS, datos, id_ciclo):
+    conexion=conectrar_dB(USER_DB,PASS_DB,HOST_DB,DB,PORT)
+    if verificar_conexion(conexion)==False:
+        print("Fallo en la conecion")
+        pass
     try:
         cursor = conexion.cursor()
         consulta_inicio = f"""
@@ -56,8 +75,14 @@ def cargar_componentes(nombre_SENS, datos, id_ciclo, conexion):
     except Exception as e:
         Print_DB("fallo al cargar Componentes")
         print(f"error en cargar lso componentes a la db: {str(e)} ")
+    finally: 
+        desconectar_dB(conexion)
 
-def cerrar_ciclo(id_ciclo,estado,tiempo,cant_pausas,conexion):
+def cerrar_ciclo(id_ciclo,estado,tiempo,cant_pausas):
+    conexion=conectrar_dB(USER_DB,PASS_DB,HOST_DB,DB,PORT)
+    if verificar_conexion(conexion)==False:
+        print("Fallo en la conecion")
+        pass  
     try:
         cursor=conexion.cursor()
         cierre = """
@@ -71,6 +96,8 @@ def cerrar_ciclo(id_ciclo,estado,tiempo,cant_pausas,conexion):
         Print_DB("Se genero el cierre de un ciclo")
     except Exception as e :
         Print_DB(f"Error en el cierre de ciclo{str(e)}")
+    finally: 
+        desconectar_dB(conexion)
 
 def desconectar_dB(conexion):
     conexion.close()

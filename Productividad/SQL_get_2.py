@@ -47,10 +47,10 @@ def consultar_productividad(fecha_inicial, fecha_final, equipo):
     
 @cross_origin
 @app.route('/data/<equipo>/<fecha_inicial>/<fecha_final>/<sens>', methods=['GET'])
-def consultar_datos(fecha_inicial, fecha_final, equipo, sens):
+def consultar_datos(fecha_inicial, fecha_final, equipo, tag):
     try:
         conn = conectar_DB(USER_DB, PASS_DB, HOST_DB, DB, PORT)
-        columnas, data = get_data(equipo, fecha_inicial, fecha_final, sens, conn)
+        columnas, data = get_data(equipo, fecha_inicial, fecha_final, tag, conn)
         conn.close()
 
         if columnas is None or data is None:
@@ -68,7 +68,7 @@ def consultar_datos(fecha_inicial, fecha_final, equipo, sens):
             excel_data,
             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             as_attachment=True,
-            download_name=f'resultado_{sens}.xlsx'
+            download_name=f'resultado_{tag}.xlsx'
         )
 
     except Exception as e:
@@ -77,4 +77,4 @@ def consultar_datos(fecha_inicial, fecha_final, equipo, sens):
 
 if __name__ == '__main__':
     
-    app.run(host=IP, debug=True, use_reloader=False)
+    app.run(host=IP, debug=True, use_reloader=False, port=5001)
