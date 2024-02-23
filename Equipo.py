@@ -24,6 +24,7 @@ class nodo:
         self.Ciclo_tipo_fin             = idx["Ciclo Tipo de fin"]
         self.Ciclo_tiempo_tras          = idx["Ciclo Tiempo Transcurrido"]
         self.Ciclo_pausas_totales       = idx["CicloPausas Totales"]
+        self.Ciclo_nro_lote             = idx["Numero de Lote"]
 
 #Guardar en base cuando termina el ciclo idddd
 
@@ -58,7 +59,8 @@ class Equipo:
                                         self.nodos.Cilclo_nro_torres_idx,
                                         self.nodos.Ciclo_nro_receta_idx,
                                         self.nodos.Ciclo_nombre_receta_idx,
-                                        self.nodos.numero_Pasos_idx
+                                        self.nodos.numero_Pasos_idx,
+                                        self.nodos.Ciclo_nro_lote
                                     ]
         #Aca se almacena los datos de lectura unica.
         self.valores_inicio_ciclo       ={}
@@ -88,8 +90,8 @@ class Equipo:
         self.id_ciclo_DB=None
         
         self.ciclo_ACTIVATE=False
-  
-
+        self.tiempotranscurrido=0
+        
     def connect(self):
         try:
             self.client = Client(self.server_url)
@@ -117,7 +119,7 @@ class Equipo:
             nodo_tag = self.client.get_node(f"ns={self.NSpace};i={nodo_idx}")
             try:
                 value = nodo_tag.get_value()
-                self.valores_inicio_ciclo[i] = Dato_OPC(tiempo=datetime.now(), valor=value)#strftime("%Y-%m-%d %H:%M:%S")
+                self.valores_inicio_ciclo[i] = Dato_OPC(tiempo=datetime.now(), valor=value)
             except Exception as e:
                     error_msj = str(e)
                     if (EXP_NODE_NO_READ in error_msj):

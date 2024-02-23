@@ -69,7 +69,7 @@ Historico toma un sensor y devuelve el historico del ciclo actual.
 def consultar_historicos(equipo,tag):
     try:
         json_data = {}
-        #print(equipo)
+        print(equipo)
 
         if equipo == "Cocina1":
             json_data = r.report_grafica(Equipo1,tag)  
@@ -116,7 +116,7 @@ if __name__ == '__main__':
               url=INDX_EQUIPO2["URL"],
               ns=INDX_EQUIPO2["NameSpace"],
               id=2,
-              index=INDX_EQUIPO2
+              index=INDX_EQUIPO1
               )
     Equipo1.connect()  
     #Equipo2.connect()  

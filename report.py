@@ -32,21 +32,32 @@ class Report:
     def report_grafica(self,equipo,sensor):
         try:
             results = []
+            
+            max=0
+            min=10000000
             # Verificar que el sensor existe en el historial del equipo
             if sensor in INDX_DATOS_LECTURA_OPC:
                 # Iterar sobre los valores del sensor y agregarlos a la lista results
                 posicion_sensor = INDX_DATOS_LECTURA_OPC.index(sensor)
                 for value in equipo.arr_historico[posicion_sensor]:
+                    
+                    valor=value.Get_Valor()
                     results.append({
-                        "value": value.Get_Valor(),
+                        "value": valor,
                         "time": int(value.Get_Tiempo().timestamp())
                     })
+                    if(valor>max):
+                        max=valor
+                    if(valor<min):
+                        min=valor
 
                 # Crear el diccionario de datos_sensor con la información recopilada
                 datos_sensor = {
-                    "sensor": sensor,
-                    "results": results,
-                    "ULTIMO":   equipo.valores_datos[posicion_sensor].Get_Valor()
+                    "sensor":   sensor,
+                    "results":  results,
+                    "ULTIMO":   equipo.valores_datos[posicion_sensor].Get_Valor(),
+                    "MAX":      max,
+                    "MIN":      min
                 }
                 return datos_sensor
         except Exception as e:

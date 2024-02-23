@@ -1,6 +1,6 @@
 
 TIME_INTERVAL=3
-IP="192.168.0.166"
+IP="192.168.0.90"
 
 URL="opc.tcp://192.168.0.140:8080"
 #URL="opc.tcp://192.168.0.95:4840/freeopcua/server/"
@@ -24,7 +24,8 @@ INDX_EQUIPO1={
     "Ciclo Numero de torres":       14,#numero 
     "Ciclo Tipo de fin":            5,
     "Ciclo Tiempo Transcurrido":    16,
-    "CicloPausas Totales":          16
+    "CicloPausas Totales":          16,
+    "Numero de Lote":               16
 }
 INDX_EQUIPO2={
     "URL":                          URL, 
