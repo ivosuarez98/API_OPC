@@ -16,10 +16,10 @@ ESTADO_CANCELADO        =       5           #CANCELADO
 
 
 USER_DB =   'root'
-PASS_DB =   ''
+PASS_DB =   '1234'
 HOST_DB =   'localhost'
-DB      =   'dato'
-PORT    =   '1010'
+DB      =   'pf_cremona'
+PORT    =   '3306'
 
 
 
