@@ -13,7 +13,7 @@ def mng(equipo):
             if not equipo.ciclo_ACTIVATE and not equipo.is_ciclo_end() :
                 equipo.send_start_ciclo_db()
             if not equipo.is_ciclo_end():
-                equipo.cargar_en_historico()
+                equipo.cargar_en_historico() 
             if equipo.is_ciclo_end() and equipo.ciclo_ACTIVATE:
                 print("Datos DB")
                 equipo.cargar_en_historico()

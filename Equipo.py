@@ -178,7 +178,8 @@ class Equipo:
             id_receta=self.valores_inicio_ciclo[2].Get_Valor()
             fecha_receta=self.valores_inicio_ciclo[2].Get_Tiempo()
             estado=self.get_estado()
-            self.id_ciclo_DB=cargar_inicio_ciclo(self.id,id_receta,fecha_receta,estado)
+            lote=self.valores_cierre_ciclo[5]
+            self.id_ciclo_DB=cargar_inicio_ciclo(self.id,id_receta,fecha_receta,estado,lote)
             self.ciclo_ACTIVATE=True
             self.tiempoinicio=datetime.now()
 

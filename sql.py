@@ -24,7 +24,7 @@ def verificar_conexion(conexion):
 """
 Cargar el ciclo a la base de datos y devuelve el indice
 """
-def cargar_inicio_ciclo(id_equipo,id_receta,fecha_inicico,estado):
+def cargar_inicio_ciclo(id_equipo,id_receta,fecha_inicico,estado,lote):
     
     conexion=conectrar_dB(USER_DB,PASS_DB,HOST_DB,DB,PORT)
     if verificar_conexion(conexion)==False:
@@ -33,10 +33,10 @@ def cargar_inicio_ciclo(id_equipo,id_receta,fecha_inicico,estado):
     try:
         cursor = conexion.cursor()
         consulta_insert = """
-                            INSERT INTO ciclo (id_equipo, id_receta, fecha_inicio, estado_inicio)
+                            INSERT INTO ciclo (id_equipo, id_receta, fecha_inicio, estado_inicio, lote)
                             VALUES (%s, %s, %s, %s)
                         """
-        valores_insert = (id_equipo, id_receta, fecha_inicico, estado)
+        valores_insert = (id_equipo, id_receta, fecha_inicico, estado,lote)
         cursor.execute(consulta_insert, valores_insert)
         last_id = cursor.lastrowid
         conexion.commit()

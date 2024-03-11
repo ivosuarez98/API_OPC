@@ -97,8 +97,31 @@ def consultar_pesos(con):
         # Cierre de la conexión
         cursor.close()
 def ver_ciclos(fecha_inicial, fecha_final, equipo,con):
-   pass
+    conn = con
+    cursor = conn.cursor()
 
+    try:
+        # Consulta SQL
+        consulta = """
+            SELECT id_ciclo, estado_inicio, id_receta
+            FROM ciclo
+            WHERE id_equipo = %s
+            AND estado_inicio = 2
+            AND Fecha_inicio BETWEEN %s AND %s
+            GROUP BY id_ciclo, estado_inicio, id_receta;
+        """
+
+        # Ejecución de la consulta
+        cursor.execute(consulta, (equipo, fecha_inicial, fecha_final))
+
+        # Obtención de los resultados
+        resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        print(f"Error:{str(e)}")
+    finally:
+        # Cierre de la conexión
+        cursor.close()
 def procesar_datos(ciclos,cierre_ciclos,peso):
     JORNADA=8
     tiempo_uso=0
