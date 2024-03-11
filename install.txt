@@ -1,0 +1,1 @@
+pip install opcua flask flask-cors apscheduler mysql-connector-python
